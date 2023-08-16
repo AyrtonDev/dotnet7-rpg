@@ -29,7 +29,7 @@ namespace dotnet_rpg.Services.CharacterService
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
             var character = _mapper.Map<Character>(newCharacter);
 
-            _context.Characters.AddAsync(character);
+            await _context.Characters.AddAsync(character);
             await _context.SaveChangesAsync();
 
             serviceResponse.Data = 
@@ -37,10 +37,10 @@ namespace dotnet_rpg.Services.CharacterService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
+        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters(int userId)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            var dbCharacters = await _context.Characters.ToListAsync();
+            var dbCharacters = await _context.Characters.Where(c => c.User!.Id == userId).ToListAsync();
             serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
             return serviceResponse;
         }
@@ -79,7 +79,7 @@ namespace dotnet_rpg.Services.CharacterService
             }
             catch (Exception ex) 
             {
-                serviceResponse.Sucess = false;
+                serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
             }
 
@@ -105,7 +105,7 @@ namespace dotnet_rpg.Services.CharacterService
             }
             catch (Exception ex) 
             {
-                serviceResponse.Sucess = false;
+                serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
             }
 

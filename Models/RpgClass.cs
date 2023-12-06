@@ -8,5 +8,6 @@ namespace dotnet_rpg.Models
         Knight = 1,
         Mage = 2,
         Cleric = 3,
+        Range = 4,
     }
 }
